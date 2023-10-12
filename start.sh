@@ -25,10 +25,10 @@ fi
 
 # Verifica se o pip está instalado
 if ! command -V pip &>/dev/null; then
-    echo "pip não encontrado. Instalando pip..."
+    echo "gerenciador de pacotes pip não encontrado. Instalando pip..."
     apt install python3-pip -y
 else
-    echo "pip encontrado."
+    echo "gerenciador de pacotes pip encontrado."
 fi
 
 # captura o nome do usuário original para executar os comandos como ele e não como root
@@ -36,25 +36,25 @@ original_user="$SUDO_USER"
 
 # Verifica se o ambiente virtual está instalado
 if ! command -v virtualenv &>/dev/null; then
-    echo "virtualenv não encontrado. Instalando virtualenv..."
-    su -c "pip install virtualenv" $original_user
+    echo "biblioteca virtualenv não encontrada. Instalando virtualenv..."
+    su -c "pip install virtualenv" "$original_user"
 else
-    echo "virtualenv encontrado."
+    echo "biblioteca virtualenv encontrada."
 fi
 
 # Cria um ambiente virtual
 if [ ! -d "$venv_name" ]; then
     echo "Criando ambiente virtual $venv_name..."
-     su -c "virtualenv $venv_name" $original_user
+     su -c "virtualenv $venv_name" "$original_user"
 fi
 
 # Ativa o ambiente virtual
-su -c "source $venv_name/bin/activate" $original_user
+su -c "source $venv_name/bin/activate" "$original_user"
 
 # Instala as dependências do arquivo requirements.txt no ambiente virtual
 if [ -f "requirements.txt" ]; then
     echo "Instalando as dependências do arquivo requirements.txt no ambiente virtual..."
-    su -c "pip install -r requirements.txt" $original_user
+    su -c "pip install -r requirements.txt" "$original_user"
 else
     echo "Arquivo requirements.txt não encontrado. Não foi possível instalar as dependências."
 fi
